@@ -9,6 +9,15 @@ Steps to implement a Hash Table :
 4.) Subtract the UTF-16 code of the current iteration which is found using the method charCodeAt(0) by 96(lowercase letters within ASCII table) to be a value to be saved in a second constant variable
 5.) finally we grab that first mutable variable that is being used as a counter and reassign the value to its previous value Multiplied by the *Salt* plus the value variable and finally that total would then by modulo of current Data structure's Length
 
+1.) Choose a data structure (e.g., array, linked list) to store data.
+2.)  Define two variables:
+    * Mutable counter for summing (initialized to 0)
+    * Constant salt (preferably a prime number) for desired outcome
+3.) Set up a loop with a constraint (key length or limit).
+4.) Calculate a value by subtracting 96 from the UTF-16 code of the character at the current iteration (charCodeAt(0)).
+5.) Update the mutable counter: counter = (counter * salt) + calculated value.
+5.)  Compute the final hash: hash = counter % data structure length."
+
 * Trivia *
 
 * Hash tables are collections of key-value pairs
@@ -43,15 +52,15 @@ const hash = (key, len) => {
     for (let character of key) {
         //map "a" to 1,"b" to 2, "c"to 3, etc
         let value = character.charCodeAt(0) - 96;
-        console.log(character, character.charCodeAt())
+        // console.log(character, character.charCodeAt())
         total = (total + value) % len;
     }
     return total
 }
 
-console.log("Basic hash function:", hash("pink", 10)) // 0
-console.log("Basic hash function:", hash("orangered", 10)) // 7
-console.log("Basic hash function:", hash("cyan", 10)) // 3
+// console.log("Basic hash function:", hash("pink", 10)) // 0
+// console.log("Basic hash function:", hash("orangered", 10)) // 7
+// console.log("Basic hash function:", hash("cyan", 10)) // 3
 
 
 // the hash function employs a small door stop with is iteration to stop at a certain interval
@@ -76,11 +85,11 @@ const hashRevisited = (key, len) => {
     return total
 }
 
-console.log("Basic hashRevisited function:", hashRevisited("pink", 10)) // 0
-console.log("Basic hashRevisited function:", hashRevisited("orangered", 10)) // 7
-console.log("Basic hashRevisited function:", hashRevisited("cyan", 10)) // 3
-console.log("Basic hashRevisited function:", hashRevisited("hi", 10)) // 7
-console.log("Basic hashRevisited function:", hashRevisited("job", 10)) // 7
+// console.log("Basic hashRevisited function:", hashRevisited("pink", 10)) // 0
+// console.log("Basic hashRevisited function:", hashRevisited("orangered", 10)) // 7
+// console.log("Basic hashRevisited function:", hashRevisited("cyan", 10)) // 3
+// console.log("Basic hashRevisited function:", hashRevisited("hi", 10)) // 7
+// console.log("Basic hashRevisited function:", hashRevisited("job", 10)) // 7
 
 
 /*
@@ -149,13 +158,13 @@ class HashTable {
         if (this.keyMap[index]) {
             for (let i = 0; i < this.keyMap.length; i++) {
                 if (this.keyMap[index][i][0] === key) {
-                    console.log('Key', this.keyMap[index][i])
+                    // console.log('Key', this.keyMap[index][i])
                     return this.keyMap[index][i]
                 }
 
             }
         }
-        console.log(undefined)
+        // console.log(undefined)
         return undefined
     }
 
@@ -170,7 +179,7 @@ class HashTable {
                 }
             }
         }
-        console.log("returning Array :", returnArray)
+        // console.log("returning Array :", returnArray)
         return returnArray
     }
     keys() {
@@ -184,7 +193,7 @@ class HashTable {
                 }
             }
         }
-        console.log("returning Array :", returnArray)
+        // console.log("returning Array :", returnArray)
         return returnArray
     }
 
@@ -206,3 +215,160 @@ hT.set("violet", "#DDA0DD")
 hT.get("olive")
 hT.keys()
 hT.values()
+
+
+/*
+Hash Tables with a Linked List
+*/
+
+
+class Node {
+    constructor(value) {
+        // to hold the value of the node
+        this.value = value;
+        // to hold the length of the value
+        this.length = value.length;
+        // points to the next node in the bucket
+        this.next = null
+    }
+}
+
+class BucketNode {
+    constructor(zone) {
+        // to identify bucket
+        this.zone = zone
+        // points to the next bucket in the list
+        this.next = null
+        //  to hold node instances that identify with the buckets zone
+        this.bucket = null
+    }
+}
+
+class linkedList {
+    constructor() {
+        this.head = null
+        this.tail = null
+        this.length = 0
+    }
+    _hash(key) {
+        let total = 0;
+        let prime = 31;
+        for (let i = 0; i < Math.min(key.length, 100); i++) {
+            const element = key[i];
+            let value = element.charCodeAt(0) - 96;
+            total += value
+        }
+        total = ((total * prime) % key.length)
+        // console.log("_hash total", total)
+        return total
+    }
+    traverse() {
+        let step = 0
+        let current = this.head
+        while (current) {
+            console.log(`Node ${step} Zone, Bucket`, current.zone, current.bucket)
+            current = current.next
+            step++
+        }
+    }
+    set(key) {
+        /*
+        We want to hash our current key
+        */
+        const hashedKey = this._hash(key)
+        console.log("Step 1) :hashedKey", hashedKey)
+
+        /*
+        We then want to turn our key into a node instance
+        */
+
+        const hashNode = new Node(key)
+        console.log("Step 2) :hashNode", hashNode)
+
+        /*
+        We then want to turn our hashed key value into a BucketNode instance to hold our nodes
+        */
+        const hashBucketNode = new BucketNode(hashedKey)
+        console.log("Step 3) :hashBucketNode", hashBucketNode)
+
+        hashBucketNode.bucket = hashNode;
+        //  Our current Head in our list
+        let currentHead = this.head
+        console.log("Step 3.5 CurrentHead :", currentHead)
+
+        /*
+        We want to See if the current head is empty and if so we will populate our first bucket with its initial node
+        */
+        if (!currentHead) {
+            console.log("Step 4.A) :currentHead", currentHead)
+            this.head = hashBucketNode
+            this.tail = this.head
+            this.head.bucket = hashNode
+            console.log("Step 4.A1) :this.head", this.head)
+            this.length++
+            return this
+
+        } else {
+            /*
+            We want to See if we have an instance of the BucketNode with the same hashed key value
+            */
+            //    set a variable to keep track of our current bucket
+            let currentBucket = null;
+            let previousBucket = null;
+            //  set up a iterative loop to search for a zone within the list that has a matching zone value
+
+            // console.log(" currentHead.zone:", currentHead.zone)
+            // console.log(" hashBucketNode.zone:", hashBucketNode.zone)
+
+            while ((currentHead && hashBucketNode) && currentHead.zone !== hashBucketNode.zone) {
+                //  set the current head to the next bucketNode in the list
+                //  set the current Bucket to our variable
+
+                // console.log("currentHead49494",currentHead)
+
+                if (currentHead) {
+
+                    console.log("step 4.5 CurrentHead", currentHead)
+                    previousBucket = currentHead
+                    console.log("step 4.5 previousBucket", previousBucket)
+                }
+                currentHead = currentHead.next
+            }
+            if (!currentBucket) {
+                // this.tail.next = currentHead
+                this.tail = currentHead
+                console.log("Previous && Current", previousBucket, currentBucket)
+
+                previousBucket.next = hashBucketNode
+                console.log("previousBucket.next: ", previousBucket.next)
+                currentBucket = previousBucket.next
+                // }
+                console.log("Step 4.B) :currentHead", currentHead)
+
+                currentBucket.next = hashNode
+                console.log("Step 4.B1) :this.head", this.head)
+                this.length++
+                return this
+            }
+
+        }
+    }
+}
+
+const link = new linkedList()
+console.log("========================================= ")
+link.set("Pink")
+console.log("========================================= ")
+// link.set("Link")
+console.log("========================================= ")
+// console.log("linked List Function traverse()", link.traverse())
+console.log("========================================= ")
+link.set("Pinky")
+console.log("========================================= ")
+// link.set("Linky")
+console.log("========================================= ")
+link.set("abcdefghijklmnopqrstuvwxyz")
+console.log("========================================= ")
+console.log("linked List", link)
+console.log("========================================= ")
+console.log("linked List Function traverse()", link.traverse())
