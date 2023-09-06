@@ -267,91 +267,68 @@ class linkedList {
         let current = this.head
         while (current) {
             console.log(`Node ${step} Zone, Bucket`, current.zone, current.bucket)
+            // ================ Bucket ==================
+            // let currentBucket = current.bucket
+            // console.log(`currentBucket ${currentBucket.next['value']}`)
+            // while (currentBucket) {
+            //     console.log(`currentBucket ${currentBucket.value} ${step++}`)
+            //     currentBucket = currentBucket.next
+            //     if (step === 4) return this
+            // }
+            // ==========================================
             current = current.next
             step++
         }
     }
     set(key) {
-        /*
-        We want to hash our current key
-        */
-        const hashedKey = this._hash(key)
-        console.log("Step 1) :hashedKey", hashedKey)
 
-        /*
-        We then want to turn our key into a node instance
-        */
+        const hashKeyValue = this._hash(key)
+        // Our value that will assign our placement in the Linked list
+        const newBucket = new BucketNode(hashKeyValue)
+        console.log(`new Bucket ${newBucket.zone}`)
+        // Our node that will live in our "bucket "
+        const newNode = new Node(key)
+        console.log(`newNode ${newNode.value}`)
+        // ========== Assigning the "Bucket" to the List ===========
 
-        const hashNode = new Node(key)
-        console.log("Step 2) :hashNode", hashNode)
-
-        /*
-        We then want to turn our hashed key value into a BucketNode instance to hold our nodes
-        */
-        const hashBucketNode = new BucketNode(hashedKey)
-        console.log("Step 3) :hashBucketNode", hashBucketNode)
-
-        hashBucketNode.bucket = hashNode;
-        //  Our current Head in our list
-        let currentHead = this.head
-        console.log("Step 3.5 CurrentHead :", currentHead)
-
-        /*
-        We want to See if the current head is empty and if so we will populate our first bucket with its initial node
-        */
-        if (!currentHead) {
-            console.log("Step 4.A) :currentHead", currentHead)
-            this.head = hashBucketNode
-            this.tail = this.head
-            this.head.bucket = hashNode
-            console.log("Step 4.A1) :this.head", this.head)
-            this.length++
-            return this
-
+        // if there is not a current bucket
+        if (!(this.head)) {
+            newBucket.bucket = newNode
+            this.head = newBucket;
+            this.head['bucket']['next'] = null
+            this.tail = newBucket
+            console.log(`*1*1* current head ${this.head['bucket']['value']}`)
         } else {
-            /*
-            We want to See if we have an instance of the BucketNode with the same hashed key value
-            */
-            //    set a variable to keep track of our current bucket
-            let currentBucket = null;
-            let previousBucket = null;
-            //  set up a iterative loop to search for a zone within the list that has a matching zone value
 
-            // console.log(" currentHead.zone:", currentHead.zone)
-            // console.log(" hashBucketNode.zone:", hashBucketNode.zone)
+            // There is currently a bucket with the same value as the returned hash value
 
-            while ((currentHead && hashBucketNode) && currentHead.zone !== hashBucketNode.zone) {
-                //  set the current head to the next bucketNode in the list
-                //  set the current Bucket to our variable
+            let currentZone = this.head
+            console.log(`*2*1* current Bucket ${currentZone.zone}`)
+            console.log(`*2*2* next node in the Bucket ${currentZone.bucket['next']}`)
 
-                // console.log("currentHead49494",currentHead)
+            // there is currently another bucket in the list so off we search for our bucket if there is one
 
-                if (currentHead) {
+            while (currentZone) {
+                console.log(`*3*1* ${currentZone.zone} === ${hashKeyValue}? ${currentZone.zone === hashKeyValue}`)
 
-                    console.log("step 4.5 CurrentHead", currentHead)
-                    previousBucket = currentHead
-                    console.log("step 4.5 previousBucket", previousBucket)
+                if (currentZone.zone === hashKeyValue) {
+                    let temp = currentZone.bucket
+                    console.log(`*3*2* temp ${temp.value}`)
+                    currentZone.bucket['next'] = newBucket
+                    // console.log(`*3*3* current Zone bucket ${currentZone.bucket['value']}`)
+                    // currentZone.bucket['next'] = temp
                 }
-                currentHead = currentHead.next
+                currentZone = currentZone.next
             }
-            if (!currentBucket) {
-                // this.tail.next = currentHead
-                this.tail = currentHead
-                console.log("Previous && Current", previousBucket, currentBucket)
-
-                previousBucket.next = hashBucketNode
-                console.log("previousBucket.next: ", previousBucket.next)
-                currentBucket = previousBucket.next
-                // }
-                console.log("Step 4.B) :currentHead", currentHead)
-
-                currentBucket.next = hashNode
-                console.log("Step 4.B1) :this.head", this.head)
-                this.length++
-                return this
-            }
+            currentZone.next = newBucket
+            currentZone.bucket = newNode
+            this.tail = newBucket
+            // =========== Assigning the node to the bucket ==========
+            let currentBucket = currentZone.bucket
 
         }
+        console.log(`This is the end of the Function`)
+        return this
     }
 }
 
@@ -359,16 +336,17 @@ const link = new linkedList()
 console.log("========================================= ")
 link.set("Pink")
 console.log("========================================= ")
-// link.set("Link")
-console.log("========================================= ")
+link.set("Link")
+// console.log("========================================= ")
 // console.log("linked List Function traverse()", link.traverse())
 console.log("========================================= ")
 link.set("Pinky")
-console.log("========================================= ")
+// console.log("========================================= ")
 // link.set("Linky")
 console.log("========================================= ")
 link.set("abcdefghijklmnopqrstuvwxyz")
 console.log("========================================= ")
 console.log("linked List", link)
 console.log("========================================= ")
-console.log("linked List Function traverse()", link.traverse())
+console.log("linked List Function traverse()")
+link.traverse()
