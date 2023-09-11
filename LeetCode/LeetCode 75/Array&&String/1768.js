@@ -21,6 +21,7 @@ Return the merged string.
  * @return {string}
 */
 
+// Brute Force
 // current solution = Runtime: 159 ms ,Memory: 50.41 md
 var mergeAlternately = function (word1, word2) {
     let returningValue = ''
@@ -36,8 +37,12 @@ var mergeAlternately = function (word1, word2) {
     }
     return returningValue
 };
-// current solution = Runtime: 55 ms ,Memory: 42.06 md
 
+// Efficient solution
+/**
+ * With this iteration it is always consent with its length as Math.Max would establish a hard endpoint and not a nth endpoint
+ */
+// current solution = Runtime: 55 ms ,Memory: 42.06 md
 var mergeAlternately = function (word1, word2) {
     let maxLength = Math.max(word1.length, word2.length);
     let returningValue = "";
@@ -47,7 +52,7 @@ var mergeAlternately = function (word1, word2) {
     return returningValue;
 };
 
-mergeAlternately('ab', 'dgkd')
+// mergeAlternately('ab', 'dgkd')
 /*
 
 Example 1:
