@@ -11,22 +11,25 @@ Given two strings str1 and str2, return the largest string x such that x divides
  * @param {string} str2
  * @return {string}
  */
+// Helper function
+const isValidate = (w, str) => {
+    if (str.length == 0) return true;
+    if (!str.startsWith(w)) return false;
+    return isValidate(w, str.slice(w.length))
+}
+
+
 var gcdOfStrings = function (str1, str2) {
+    if (str1 + str2 != str2 + str1) return '';
 
-    let arr = str1.split('')
-    let arr2 = []
-    console.log(str1.length % str2.length === 0)
-    if (str1.length % str2.length === 0) {
+    let res = ''
 
-        for (let i = 0; i < str2.length; i++) {
-            arr2.push(arr.shift())
-        }
-        if (arr2.join('') === arr.join('')) {
-            console.log(arr.join(''))
-            return arr.join('')
-        }
+    for (let i = 1; i <= str1.length; i++) {
+        let curV = str1.slice(0, i)
+        if (isValidate(curV, str2) && isValidate(curV, str1)) res = curV;
     }
-    return this
+
+    return res;
 };
 
 gcdOfStrings('ABCABC', 'ABC')
