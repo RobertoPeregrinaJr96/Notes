@@ -11,13 +11,33 @@ Note that s may contain leading or trailing spaces or multiple spaces between tw
 */
 
 /**
- * @param {string} s
+ * @param {string}
  * @return {string}
- */
-var reverseWords = function (s) {
 
+
+our parameter are a String
+our returning value should be the string in reversed order with single spacing
+
+we should spilt the string into multiple values
+iterate the array of values backwards
+cast a method to trim extra white space in each iteration
+concat the filtered value into a string
+
+return the value
+
+*/
+var reverseWords = function(s) {
+
+    let returningValue = '';
+    const arr = s.split(' ')
+    for (let i = arr.length - 1; i >= 0; i--) {
+        const element = arr[i]
+        if(element){
+        returningValue += ('' + element)
+        }
+    }
+    return returningValue.trim()
 };
-
 /*
 Example 1:
 
