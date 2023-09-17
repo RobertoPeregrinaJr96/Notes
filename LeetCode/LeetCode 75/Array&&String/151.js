@@ -33,7 +33,7 @@ var reverseWords = function(s) {
     for (let i = arr.length - 1; i >= 0; i--) {
         const element = arr[i]
         if(element){
-        returningValue += ('' + element)
+        returningValue += (' ' + element )
         }
     }
     return returningValue.trim()
