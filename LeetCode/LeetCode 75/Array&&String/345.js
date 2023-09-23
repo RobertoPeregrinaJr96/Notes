@@ -10,6 +10,10 @@ The vowels are 'a', 'e', 'i', 'o', and 'u', and they can appear in both lower an
 /**
  * @param {string} s
  * @return {string}
+
+    we have a String as a parameter
+    the expected outcome is the string with the vowels in reverse order
+
  */
 var reverseVowels = function (s) {
 
