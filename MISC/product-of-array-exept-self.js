@@ -22,36 +22,51 @@ Output: [24,12,8,6]
 */
 
 const productExceptSelf = function (nums) {
-    // Your code here
-
+    // attempt 1
     const output = []
     // for (let i = 0; i < nums.length; i++) {
     //     let temp = nums.splice(0, 1)
-    //     let sum = nums.reduce((a, b) => a * b)
+    //     let sumOfProduct = nums.reduce((a, b) => a * b)
     //     nums.push(...temp)
-    //     output.push(sum)
+    //     output.push(sumOfProduct)
     // }
+    // =====================================================
+    // attempt 2
+    // for (let i = 0; i < nums.length; i++) {
+    //     let sumOfProduct = 1
+    //     for (let j = nums.length - 1; j > 0; j--) {
+    //         let nextNumber = nums[j]
+    //         if (i !== j) {
+    //             sumOfProduct = sumOfProduct * nextNumber
+    //         }
+    //     }
+    //     if (sumOfProduct !== 1) {
+    //         output.push(sumOfProduct)
+    //     }
+    // }
+    // =====================================================
+    // attempt 3
+    let sumOfProduct = 1
+    let i = 0;
+    let j = nums.length
 
-    for (let i = 0; i < nums.length; i++) {
-        const currentNumber = nums[i];
-        let sumOfProduct = 1
-
-        for (let j = nums.length - 1; j > 0; j--) {
-            let nextNumber = nums[j]
-            console.log("nextNumber: ", nextNumber)
-            if (nextNumber !== currentNumber) {
-                sumOfProduct = sumOfProduct * nextNumber
-                console.log("SUM Of PRODUCT: ", sumOfProduct)
-            }
-        }
-        if (sumOfProduct !== 1) {
-            output.push(sumOfProduct)
-        }
+    let stack = new Map()
+    while (nums.length !== 0) {
+        let temp = nums.pop()
+        stack.set(temp, temp)
+    };
+    while (stack.size >= 0) {
+        let temp = stack.get(nums[i])
+        console.log(temp)
+        stack.delete(temp)
+        output.push(temp)
     }
+    console.log(stack)
+
+
 
     console.log(output)
     return output
-
 };
 
 let arr = [1, 2, 3, 4]
