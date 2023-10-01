@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "PRACTICE",
+            "request": "launch",
+            "mainClass": "Language.Java.PRACTICE",
+            "projectName": "Notes_508da8a7"
+        },
+        {
+            "type": "java",
             "name": "Practice",
             "request": "launch",
             "mainClass": "Language.Java.Practice",
