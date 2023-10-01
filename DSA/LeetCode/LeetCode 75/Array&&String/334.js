@@ -9,10 +9,27 @@ Given an integer array nums, return true if there exists a triple of indices (i,
  * @param {number[]} nums
  * @return {boolean}
  */
-var increasingTriplet = function (nums) {
+var increasingTriplet = function(nums) {
 
-};
+    let firstNum = Infinity;
+    let secondNum = Infinity;
 
+    for(let currentNum of nums){
+
+        if(currentNum > secondNum){
+            return true;
+        }
+
+        if(currentNum > firstNum){
+            secondNum = currentNum;
+        }else{
+            firstNum = currentNum
+        }
+    }
+
+    return false;
+
+    };
 /*
 Example 1:
 
